@@ -22,7 +22,7 @@ const createNewUser = async (req, res) => {
 
     try {
         await UserModel.createNewUser(body);
-        res.json({
+        res.status(201).json({
             message: 'CREATE new user success',
             data: body
         });
@@ -34,27 +34,45 @@ const createNewUser = async (req, res) => {
     }
 };
 
-const updateUser = (req, res) => {
+const updateUser = async (req, res) => {
     const {idUser} = req.params;
-    console.log('idUser', idUser);
-    res.json({
-        message: 'UPDATE user sucess',
-        data: req.body,
-    })
+    const {body} = req;
+
+    try {
+        await UserModel.updateUser(body, idUser);
+        res.json({
+            message: 'Update user success',
+            data: {
+                id: idUser,
+                ...body
+            },
+        });
+        
+    } catch (error) {
+        res.status(500).json({
+            message: 'Server Error',
+            serverMessage: error,
+        })
+    }
 }
 
-const deleteUser = (req, res) => {
+const deleteUser = async (req, res) => {
     const {idUser} = req.params;
-    res.json({
-        data: {
-            message: 'DELETE user success',
-            id: idUser,
-            name: "Gibran",
-            email: "gibran@gmail.com",
-            address: "mataram"
-        }
-    })
 
+    try {
+        await UserModel.deleteUser(idUser);
+        res.json({
+            message: 'DELETE users success',
+            data: null
+        })
+        
+    } catch (error) {
+        res.status(500).json({
+            message: 'Server Error',
+            serverMessage: error,
+        });
+        
+    }
 }
 
 module.exports = {

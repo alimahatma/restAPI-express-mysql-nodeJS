@@ -15,6 +15,11 @@ app.use(express.json());
 
 app.use('/users', useRoutes);
 
+app.get('/', (req, res) => {
+
+    res.send('Hello ini halaman Utama');
+});
+
 app.listen(PORT, () => {
     console.log(`Server berhasil dijalankan di ${PORT}`);
 });
